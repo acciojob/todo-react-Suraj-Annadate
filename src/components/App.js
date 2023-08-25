@@ -1,29 +1,46 @@
-
-import React,{useState} from "react";
-import './../styles/App.css';
-import Display from "./Display"
+import React, { useState } from "react";
 
 const App = () => {
+  const [items, setItems] = useState([]);
+  const [inputValue, setInputValue] = useState("");
 
-  let [listdata,setListdata]=useState([]);
-  let [ipval,setIpval]=useState("");
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
 
-  function submit (e) {
-    e.preventDefault();
-    setListdata([...listdata,ipval])
-    setIpval("");
-  }
+  const handleAddItem = () => {
+    if (inputValue.trim() !== "") {
+      setItems([...items, inputValue]);
+      setInputValue("");
+    }
+  };
+
+  const handleRemoveItem = (index) => {
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
+  };
+
   return (
     <div>
-        {/* Do not remove the main div */}
-        <h3>To-Do List</h3>
-        <form onSubmit={submit}>
-          <input type="text" value={ipval} onChange={(e)=>{setIpval(e.target.value)}}/>
-          <button type="submit">Add-Todo</button>
-        </form>
-        <Display listdata={listdata} setListdata={setListdata}/>
+      <h2>Todo List</h2>
+      <div>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+        <button onClick={handleAddItem}>Add Todo</button>
+      </div>
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>
+            {item}
+            <button onClick={() => handleRemoveItem(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
