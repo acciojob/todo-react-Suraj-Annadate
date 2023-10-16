@@ -1,46 +1,43 @@
-import React, { useState } from "react";
+
+import React ,{useState} from "react";
+import './../styles/App.css';
 
 const App = () => {
-  const [items, setItems] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+ 
+  const[input,setInput]=useState('');
+  const[tasks,setTasks]=useState([]);
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
+  console.log('input: ',input);
+  console.log('tasks: ',tasks);
+  function add(){
+    setTasks([...tasks,input]);
+  }
 
-  const handleAddItem = () => {
-    if (inputValue.trim() !== "") {
-      setItems([...items, inputValue]);
-      setInputValue("");
-    }
-  };
+  function deleteTask(task){
+     setTasks(tasks.filter((t)=>{
+          if(t!==task) return t;
+     }))
+  }
 
-  const handleRemoveItem = (index) => {
-    const newItems = items.filter((_, i) => i !== index);
-    setItems(newItems);
-  };
 
   return (
-    <div>
-      <h2>Todo List</h2>
-      <div>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-        />
-        <button onClick={handleAddItem}>Add Todo</button>
-      </div>
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>
-            {item}
-            <button onClick={() => handleRemoveItem(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+    <div style={{textAlign:'center'}}>
+        {/* Do not remove the main div */}
+        <p>To-Do List</p>
+         <div>
+          <input type='text'  value={input} onChange={(e)=>setInput(e.target.value)}/>
+          <button onClick={add}>Add Todo</button>
+         </div>
+         <ul>
+           {tasks.length>0 && tasks.map((task,index)=>{
+            return <li style={{display:'flex',justifyContent:'space-between'}} key={index}>
+             <span>{task}</span> 
+             <button onClick={()=>deleteTask(task)}>Delete</button>
+            </li>
+           })}
+         </ul>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
