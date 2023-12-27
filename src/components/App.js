@@ -1,43 +1,43 @@
 
-import React ,{useState} from "react";
+import React, { useState } from "react";
 import './../styles/App.css';
 
-const App = () => {
- 
-  const[input,setInput]=useState('');
-  const[tasks,setTasks]=useState([]);
+  const App = () =>{
+        
+      let [list,setList] = useState([]);
+      let [item,setItem] = useState("");
+      
+        function addingItem(e){
+            setItem(e.target.value);
+        }
 
-  console.log('input: ',input);
-  console.log('tasks: ',tasks);
-  function add(){
-    setTasks([...tasks,input]);
+        function addtolist(){
+              setList([...list,item]); 
+              setItem('');      
+        }
+
+        function removeitem(itemName){
+          const updatedTodoList = list.filter((item)=>item !== itemName);
+               setList(updatedTodoList);
+        }
+
+    return (
+        <div>
+          <div>
+              <h1>To-Do List</h1>
+              <input type="text" onChange={addingItem} value={item}/>
+              <button onClick={addtolist}>Add Todo</button>
+          </div>
+          {
+            list && list.map((items,index)=>(
+                <div key={index}>
+                    <span className="itemName">{items}</span>
+                     {console.log(items)}
+                    <button onClick={() =>removeitem(items)}>Delete</button>
+                </div>
+              ))
+          }
+        </div>
+    )
   }
-
-  function deleteTask(task){
-     setTasks(tasks.filter((t)=>{
-          if(t!==task) return t;
-     }))
-  }
-
-
-  return (
-    <div style={{textAlign:'center'}}>
-        {/* Do not remove the main div */}
-        <p>To-Do List</p>
-         <div>
-          <input type='text'  value={input} onChange={(e)=>setInput(e.target.value)}/>
-          <button onClick={add}>Add Todo</button>
-         </div>
-         <ul>
-           {tasks.length>0 && tasks.map((task,index)=>{
-            return <li style={{display:'flex',justifyContent:'space-between'}} key={index}>
-             <span>{task}</span> 
-             <button onClick={()=>deleteTask(task)}>Delete</button>
-            </li>
-           })}
-         </ul>
-    </div>
-  )
-}
-
-export default App
+  export default App;
